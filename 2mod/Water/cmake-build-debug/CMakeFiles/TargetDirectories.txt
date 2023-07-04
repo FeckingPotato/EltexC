@@ -1,0 +1,3 @@
+/home/potato/eltex/2mod/Water/cmake-build-debug/CMakeFiles/Water.dir
+/home/potato/eltex/2mod/Water/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/potato/eltex/2mod/Water/cmake-build-debug/CMakeFiles/rebuild_cache.dir

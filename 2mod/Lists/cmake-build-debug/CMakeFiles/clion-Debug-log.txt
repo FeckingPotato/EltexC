@@ -1,0 +1,4 @@
+/home/potato/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/223.8617.54/bin/cmake/linux/x64/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=/home/potato/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/223.8617.54/bin/ninja/linux/x64/ninja -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -G Ninja -S /home/potato/eltex/2mod/Lists -B /home/potato/eltex/2mod/Lists/cmake-build-debug
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/potato/eltex/2mod/Lists/cmake-build-debug
