@@ -50,21 +50,21 @@ node_t* traverse(unsigned int index, list_t* list) {
     return current;
 }
 
-int pushInd(int value, unsigned int index, list_t* list) {
+void pushInd(int value, unsigned int index, list_t* list) {
    if (index > list->length) {
-       return 1;
+       return;
    }
     if (list->head == NULL && list->tail == NULL) {
         pushFirst(value, list);
-        return 0;
+        return;
     }
     if (index == 0) {
         pushHead(value, list);
-        return 0;
+        return;
     }
     if (index == list->length) {
         pushTail(value, list);
-        return 0;
+        return;
     }
     node_t* right = traverse(index, list);
     node_t* left = right->prev;
@@ -75,7 +75,6 @@ int pushInd(int value, unsigned int index, list_t* list) {
     current->next = right;
     current->value = value;
     list->length++;
-    return 0;
 }
 
 void removeHead(list_t* list) {
@@ -112,17 +111,17 @@ void removeTail(list_t* list) {
     list->length--;
 }
 
-int removeInd(unsigned int index, list_t* list) {
+void removeInd(unsigned int index, list_t* list) {
     if (index > list->length-1) {
-        return 1;
+        return;
     }
     if (index == 0) {
         removeHead(list);
-        return 0;
+        return;
     }
     if (index == list->length-1) {
         removeTail(list);
-        return 0;
+        return;
     }
     node_t* toRemove = traverse(index, list);
     node_t* left = toRemove->prev;
@@ -131,66 +130,53 @@ int removeInd(unsigned int index, list_t* list) {
     right->prev = left;
     free(toRemove);
     list->length--;
-    return 0;
 }
 
-int setValueHead(int value, list_t* list) {
+void setValueHead(int value, list_t* list) {
     if (list->head == NULL) {
-        return 1;
+        return;
     }
     list->head->value = value;
-    return 0;
 }
 
-int setValueTail(int value, list_t* list) {
+void setValueTail(int value, list_t* list) {
     if (list->tail == NULL) {
-        return 1;
+        return;
     }
     list->tail->value = value;
-    return 0;
 }
 
-int setValueInd(int value, unsigned int index, list_t* list) {
+void setValueInd(int value, unsigned int index, list_t* list) {
     if (index > list->length-1) {
-        return 1;
+        return;
     }
     traverse(index, list)->value = value;
-    return 0;
 }
 
-result_t getValueHead(list_t* list) {
-    result_t result = {0, 0};
+int getValueHead(list_t* list) {
     if (list->head == NULL) {
-        result.error = 1;
-        return result;
+        return 0;
     }
-    result.value = list->head->value;
-    return result;
+    return list->head->value;
 }
 
-result_t getValueTail(list_t* list) {
-    result_t result = {0, 0};
+int getValueTail(list_t* list) {
     if (list->tail == NULL) {
-        result.error = 1;
-        return result;
+        return 0;
     }
-    result.value = list->tail->value;
-    return result;
+    return list->tail->value;
 }
 
-result_t getValueInd(unsigned int index, list_t* list) {
-    result_t result = {0, 0};
+int getValueInd(unsigned int index, list_t* list) {
     if (index > list->length-1) {
-        result.error = 1;
-        return result;
+        return 0;
     }
-    result.value = traverse(index, list)->value;
-    return result;
+    return traverse(index, list)->value;
 }
 
 void randFill(unsigned int amount, list_t* list) {
     for (unsigned int i = 0; i < amount; i++) {
-        pushHead(rand(), list);
+        pushHead(rand() % 1000, list);
     }
 }
 
@@ -200,7 +186,7 @@ void wipeList(list_t* list) {
     }
 }
 
-void printList(list_t* list) {
+void printListHead(list_t* list) {
     node_t* current = list->head;
     printf("[ ");
     while (current != NULL) {
@@ -210,6 +196,24 @@ void printList(list_t* list) {
     printf("]\n");
 }
 
+void printListTail(list_t* list) {
+    node_t* current = list->tail;
+    printf("[ ");
+    while (current != NULL) {
+        printf("%d ", current->value);
+        current = current->prev;
+    }
+    printf("]\n");
+}
+
+void printList(list_t* list, bool reverse) {
+    if (reverse) {
+        printListTail(list);
+        return;
+    }
+    printListHead(list);
+}
+
 void swap(node_t* first, node_t* second) {
     int temp = first->value;
     first->value = second->value;
@@ -217,21 +221,49 @@ void swap(node_t* first, node_t* second) {
 }
 
 void sortAsc(list_t* list) {
-    bool swapped;
     for (unsigned int i = 0; i < list->length - 1; i++) {
-        swapped = false;
-        node_t* current = traverse(i, list);
+        bool swapped = false;
+        node_t* current = list->head;
+        node_t* next = current->next;
         for (unsigned int j = 0; j < list->length - i - 1; j++) {
-            if (current->value > current->next->value) {
-                swap(current, current->next);
+            if (current->value > next->value) {
+                swap(current, next);
                 swapped = true;
             }
+            current = next;
+            next = current->next;
         }
-        if (swapped == false)
+        if (!swapped) {
             break;
+        }
+    }
+}
+
+void combGapUpdate(unsigned int* gap) {
+    *gap = (*gap*10)/13;
+    if (*gap < 1) {
+        *gap = 1;
     }
 }
 
 void sortDesc(list_t* list) {
-
+    unsigned int gap = list->length;
+    bool swapped = true;
+    while (gap != 1 || swapped) {
+        combGapUpdate(&gap);
+        swapped = false;
+        node_t* current = list->head;
+        node_t* next = current->next;
+        for (unsigned int i = 0; i < gap - 1; i++) {
+            next = next->next;
+        }
+        for (int i=0; i < list->length - gap; i++) {
+            if (current->value < next->value) {
+                swap(current, next);
+                swapped = true;
+            }
+            current = current->next;
+            next = next->next;
+        }
+    }
 }

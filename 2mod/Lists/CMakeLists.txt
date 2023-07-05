@@ -3,4 +3,4 @@ project(Lists C)
 
 set(CMAKE_C_STANDARD 23)
 
-add_executable(Lists main.c list.c list.h)
+add_executable(Lists main.c list.c list.h argParse.c argParse.h)
