@@ -32,17 +32,17 @@ void pour(beaker_t* from, beaker_t* to) {
 
 void solve(beaker_t beakers[3], unsigned int R) {
     while (beakers[0].current != R) {
-        printf("Poured from %d/%d beaker to %d/%d beaker\n",
+        printf("Poured from %u/%u beaker to %u/%u beaker\n",
                beakers[0].current, beakers[0].max, beakers[1].current, beakers[1].max);
         pour(&beakers[0], &beakers[1]);
         while (beakers[1].current != 0){
-            printf("Poured from %d/%d beaker to %d/%d beaker\n",
+            printf("Poured from %u/%u beaker to %u/%u beaker\n",
                    beakers[1].current, beakers[1].max, beakers[2].current, beakers[2].max);
             pour(&beakers[1], &beakers[2]);
             if (beakers[1].current == 0) {
                 break;
             }
-            printf("Poured from %d/%d beaker to %d/%d beaker\n",
+            printf("Poured from %u/%u beaker to %u/%u beaker\n",
                    beakers[2].current, beakers[2].max, beakers[0].current, beakers[0].max);
             pour(&beakers[2], &beakers[0]);
             if (beakers[0].current == R) {

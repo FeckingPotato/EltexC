@@ -5,25 +5,25 @@ int main() {
     beaker_t beakers[3];
     unsigned int R;
     printf("A beaker volume: ");
-    scanf("%ud", &(beakers[0].max));
+    scanf("%u", &(beakers[0].max));
     if (beakers[0].max == 0) {
         printf("The volume should be more than 0");
         return 0;
     }
     printf("B beaker volume: ");
-    scanf("%ud", &(beakers[1].max));
+    scanf("%u", &(beakers[1].max));
     if (beakers[1].max == 0) {
         printf("The volume should be more than 0");
         return 0;
     }
     printf("C beaker volume: ");
-    scanf("%ud", &(beakers[2].max));
+    scanf("%u", &(beakers[2].max));
     if (beakers[2].max == 0) {
         printf("The volume should be more than 0");
         return 0;
     }
     printf("(R)equired volume: ");
-    scanf("%ud", &R);
+    scanf("%u", &R);
     if (R == 0) {
         printf("The volume should be more than 0");
         return 0;
