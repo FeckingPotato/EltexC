@@ -3,4 +3,4 @@ project(Water C)
 
 set(CMAKE_C_STANDARD 23)
 
-add_executable(Water main.c)
+add_executable(Water main.c beakers.c beakers.h)
