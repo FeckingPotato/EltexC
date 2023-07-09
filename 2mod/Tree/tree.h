@@ -13,3 +13,7 @@ typedef struct {
 } tree_t;
 
 void push(int value, tree_t* tree);
+
+void pushRand(unsigned int amount, tree_t* tree);
+
+void printTree(tree_t* tree);

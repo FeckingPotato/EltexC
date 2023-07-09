@@ -7,5 +7,6 @@ world_t world;
 
 int main() {
     init(&character, &world);
+    switch (mainMenu())
     return 0;
 }

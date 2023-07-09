@@ -176,7 +176,7 @@ int getValueInd(unsigned int index, list_t* list) {
 
 void randFill(unsigned int amount, list_t* list) {
     for (unsigned int i = 0; i < amount; i++) {
-        pushHead(rand() % 1000, list);
+        pushHead(rand() % 1000 - 500, list);
     }
 }
 

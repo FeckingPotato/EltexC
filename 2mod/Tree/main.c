@@ -1,10 +1,12 @@
 #include "tree.h"
-#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 
 int main() {
+    time_t t;
+    srand((unsigned) time(&t));
     tree_t* tree = (tree_t*) malloc(sizeof(tree_t));
-    push(10, tree);
-    push(5, tree);
-    push(15, tree);
+    pushRand(10, tree);
+    printTree(tree);
     return 0;
 }
