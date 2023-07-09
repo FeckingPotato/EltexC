@@ -4,6 +4,7 @@
 void pushFirst(int value, tree_t* tree) {
     tree->root = (node_t*) malloc(sizeof(node_t));
     tree->root->value = value;
+    tree->size = 1;
 }
 
 void leftRotate(tree_t* tree, node_t* x) {
@@ -114,6 +115,7 @@ void push(int value, tree_t* tree) {
         parent->right = child;
     }
     fix(tree, child);
+    tree->size++;
 }
 
 void printRecursive(node_t* node, unsigned int level) {

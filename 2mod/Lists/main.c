@@ -17,10 +17,9 @@ int main() {
     time_t t;
     srand((unsigned) time(&t));
     list_t* list = (list_t*) malloc(sizeof(list_t));
-    bool exit = false;
     bool bootDone = false;
     char input[INPUT_SIZE];
-    while (!exit) {
+    while (true) {
         if (bootDone) {
             printf("Press any key to continue.");
             getchar();

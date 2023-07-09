@@ -10,6 +10,7 @@ typedef struct node {
 
 typedef struct {
     node_t* root;
+    unsigned int size;
 } tree_t;
 
 void push(int value, tree_t* tree);
