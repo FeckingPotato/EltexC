@@ -7,16 +7,12 @@ character_t character;
 world_t world;
 
 int main() {
-    init(&character, &world);
+    //init(&character, &world);
+    load("save.sv", &character, &world);
     bool finished = false;
     while (!finished) {
-        switch (save("save.sv", &character, &world) == 1) {
-            case 1:
-                printf("WARNING: Save failed. Unable to open the save file.\n");
-                break;
-            case 2:
-                printf("WARNING: Save faled. Unable to write to the save file.\n");
-                break;
+        if (save("save.sv", &character, &world) != 0) {
+            printf("ERROR: Save failed. Unable to open the save file.\n");
         }
         switch (mainMenu(&character, &world)) {
             case 0:
