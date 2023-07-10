@@ -1,3 +1,5 @@
+#pragma once
+
 unsigned int d6();
 
 unsigned int d20();

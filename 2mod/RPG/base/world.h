@@ -1,3 +1,4 @@
+#pragma once
 typedef struct {
     unsigned int day;
     unsigned int location; //0 - town, 1 - road event, 2 - adventure

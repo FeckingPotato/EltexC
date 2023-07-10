@@ -11,6 +11,5 @@ character_t initCharacter(char* name, unsigned int raceID) {
     character->xp = 0;
     character->money = 0;
     character->stats = statPresets[raceID];
-    character->items = (item_t*) malloc(sizeof (item_t));
     return *character;
 }
