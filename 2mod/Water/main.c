@@ -36,7 +36,7 @@ int main() {
         printf("The required volume should be less or equal to the max volume of beakers");
         return 0;
     }
-    solve(beakers, R);
+    unsigned int steps = solve(beakers, R);
     printf("Final liquid distribution in the beakers:\n"
            "1. %d/%d\n"
            "2. %d/%d\n"
@@ -44,5 +44,6 @@ int main() {
            beakers[0].current, beakers[0].max,
            beakers[1].current, beakers[1].max,
            beakers[2].current, beakers[2].max);
+    printf("Took %u steps\n", steps);
     return 0;
 }

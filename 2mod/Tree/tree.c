@@ -122,7 +122,7 @@ void printRecursive(node_t* node, unsigned int level) {
    if (node == NULL) return;
 
     for (int i = 0; i < level; i++) {
-        printf(" ");
+        printf("_");
     }
     char colour = 'B';
     if (node->red) {
