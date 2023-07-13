@@ -1,4 +1,5 @@
 #pragma once
+
 #include "../base/character.h"
 #include "../base/world.h"
 
@@ -14,8 +15,10 @@ void adventure(character_t* character, world_t* world);
 
 void shop(character_t* character, world_t* world);
 
-void boss(character_t* character, world_t* world);
+bool boss(character_t* character, world_t* world);
 
 void sleep(character_t* character, world_t* world);
 
-void stats(character_t* character, world_t* world);
+void stats(character_t *character);
+
+void endScreen(character_t* character, world_t* world);

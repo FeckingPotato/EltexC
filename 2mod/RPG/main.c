@@ -25,14 +25,16 @@ int main() {
                 shop(&character, &world);
                 break;
             case 3:
-                boss(&character, &world);
+                finished = boss(&character, &world);
                 break;
             case 4:
                 sleep(&character, &world);
                 break;
             case 5:
-                stats(&character, &world);
+                stats(&character);
                 break;
         }
+        clearOutput(true);
     }
+    endScreen(&character, &world);
 }

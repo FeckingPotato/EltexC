@@ -4,10 +4,11 @@
 #include <assert.h>
 
 void printSkills(character_t* character) {
-    printf("Your skills are:\n"
+    printf("%s's skills are:\n"
            "Strength: %u/%u\n"
            "Dexterity: %u/%u\n"
            "Intelligence: %u/%u\n",
+           character->name,
            character->stats.strength, character->stats.strengthCap,
            character->stats.dexterity, character->stats.dexterityCap,
            character->stats.intelligence, character->stats.intelligenceCap);
@@ -115,18 +116,84 @@ void adventure(character_t* character, world_t* world) {
 }
 
 void shop(character_t* character, world_t* world) {
-    assert(false && "Not implemented");
+    while (true) {
+        printf("You enter the shop. You can buy:\n");
+        for (unsigned int i = 0; i < HEALING_COUNT; i++) {
+            printf("%u. %s (heals %u HP, costs %u coins)\n",
+                   i+1, potions[i].name, potions[i].healingAmount, potions[i].price);
+        }
+        printf("Pick option (type in 0 to exit the shop)\n");
+        int option = getDigit(); // this will break if there are >9 healing items
+        if (option < 0 || option > HEALING_COUNT) {
+            printf("Wrong option, try again\n");
+            clearOutput(true);
+            continue;
+        }
+        if (option == 0) {
+            printf("You leave the shop");
+            break;
+        }
+        option--;
+        if (potions[option].price > character->money) {
+            printf("You don't have enough money.\n");
+            clearOutput(true);
+            continue;
+        }
+        unsigned int freeSlot = 0;
+        bool notFree = true;
+        while (freeSlot < HEALING_CAPACITY) {
+            if (character->healingItems[freeSlot].name == NULL) {
+                notFree = false;
+                break;
+            }
+            freeSlot++;
+        }
+        if (notFree) {
+            printf("You don't have a free slot for the item.\n");
+            clearOutput(true);
+            continue;
+        }
+        character->money -= potions[option].price;
+        character->healingItems[freeSlot] = potions[option];
+        printf("You bought %s.\n", potions[option].name);
+        clearOutput(true);
+    }
 }
 
-void boss(character_t* character, world_t* world) {
-    assert(false && "Not implemented");
+bool boss(character_t* character, world_t* world) {
+    if (character->xp / XP_PER_LEVEL < 5) {
+        printf("You try asking around about the whereabouts of the boss, but you are not notorious enough for anyone to tell you.\n"
+               "Try again when you reach the 5th level.\n");
+        return false;
+    }
+    if (!world->bossUnlocked) {
+        printf("You manage to make people tell you the location of the final boss. You can now fight him.\n");
+        world->bossUnlocked = true;
+        return false;
+    }
+    printf("The final boss fight is not done yet, so you defeat him easily.\n");
+    return true;
 }
 
 void sleep(character_t* character, world_t* world) {
-    assert(false && "Not implemented");
+    printf("You fall asleep.\n"
+           "HP restored\n");
+    character->hp = MAX_HP;
+    advanceDay(world);
 }
 
-void stats(character_t* character, world_t* world) {
-    assert(false && "Not implemented");
+void stats(character_t *character) {
+    printf("%s's stats:\n"
+           "Race: %s\n"
+           "Level: %u (%u XP left until the next level)\n"
+           "Money: %u coins",
+           character->name,
+           races[character->raceID],
+           character->xp / XP_PER_LEVEL, XP_PER_LEVEL - character->xp % XP_PER_LEVEL,
+           character->money);
+    printSkills(character);
 }
 
+void endScreen(character_t* character, world_t* world) {
+    assert(false && "Not implemented");
+}

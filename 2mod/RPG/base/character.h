@@ -3,6 +3,8 @@
 #include "../items/healing.h"
 
 #define MAX_HP 50
+#define XP_PER_LEVEL 20
+#define HEALING_CAPACITY 5
 
 typedef struct {
     unsigned int strength; // 0
@@ -22,7 +24,7 @@ typedef struct {
 } ultimate_t;
 
 typedef struct {
-    healing_t healingItems[5];
+    healing_t healingItems[HEALING_CAPACITY];
     equipment_t equipment[5]; // 0 - head, 1 - chest, 2 - legs, 3 - left hand, 4 - right hand
     unsigned int raceID;
     unsigned int hp;
