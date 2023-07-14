@@ -61,7 +61,7 @@ void init(character_t* character, world_t* world) {
            "My name is: ");
     fgets(name, 64, stdin);
     removeNL(name);
-    printf("Available races:\n"
+    printf("Available racesArticles:\n"
            "1. Human\n"
            "2. Orc\n"
            "3. Elf\n"
@@ -74,7 +74,7 @@ void init(character_t* character, world_t* world) {
     *character = initCharacter(name, race-1);
     *world = initWorld();
     printf("You are %s called %s. You live in a town called Darkhaven. You have to defeat the worst guy. But first you need to obtain a huge level.\n",
-           races[character->raceID],
+           racesArticles[character->raceID],
            character->name);
     clearOutput(true);
     int result = 1;
@@ -183,10 +183,11 @@ void sleep(character_t* character, world_t* world) {
 }
 
 void stats(character_t *character) {
-    printf("%s's stats:\n"
+    clearOutput(false);
+    printf("%s's stats are:\n"
            "Race: %s\n"
            "Level: %u (%u XP left until the next level)\n"
-           "Money: %u coins",
+           "Money: %u coins\n",
            character->name,
            races[character->raceID],
            character->xp / XP_PER_LEVEL, XP_PER_LEVEL - character->xp % XP_PER_LEVEL,

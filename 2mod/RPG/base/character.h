@@ -35,7 +35,9 @@ typedef struct {
 
 } character_t;
 
-static const char* races[3] = {"a human", "an orc", "an elf"};
+static const char* racesArticles[3] = {"a human", "an orc", "an elf"};
+
+static const char* races[3] = {"human", "orc", "elf"};
 
 static const stats_t statPresets[3] = {
         {.strength = 5, .strengthCap = 10, .dexterity = 5, .dexterityCap = 10, .intelligence = 5, .intelligenceCap = 10},
