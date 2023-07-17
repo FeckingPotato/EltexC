@@ -1,6 +1,8 @@
 #pragma once
+
 #include "../items/equipment.h"
 #include "../items/healing.h"
+#include "../adventures/enemy.h"
 
 #define MAX_HP 50
 #define XP_PER_LEVEL 20
@@ -35,6 +37,12 @@ typedef struct {
 
 } character_t;
 
+typedef struct {
+    bool crit;
+    unsigned int d6[2];
+    unsigned int damage;
+} charAttack_t;
+
 static const char* racesArticles[3] = {"a human", "an orc", "an elf"};
 
 static const char* races[3] = {"human", "orc", "elf"};
@@ -46,3 +54,7 @@ static const stats_t statPresets[3] = {
 };
 
 character_t initCharacter(char* name, unsigned int raceID);
+
+charAttack_t attackEnemy(enemy_t *enemy, character_t *character, unsigned int definedD6);
+
+bool receiveDamageChar(unsigned int damage, character_t *character);

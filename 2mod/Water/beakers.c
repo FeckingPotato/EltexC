@@ -43,7 +43,7 @@ unsigned int solve(beaker_t beakers[3], unsigned int R) {
             pour(&beakers[1], &beakers[2]);
             counter++;
             if (beakers[1].current == 0) {
-                break;
+                return counter-1;
             }
             printf("%u. Poured from %u/%u beaker to %u/%u beaker\n", counter,
                    beakers[2].current, beakers[2].max, beakers[0].current, beakers[0].max);
@@ -54,4 +54,5 @@ unsigned int solve(beaker_t beakers[3], unsigned int R) {
             }
         }
     }
+    return counter-1;
 }

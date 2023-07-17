@@ -1,4 +1,5 @@
 #include "character.h"
+#include "../system/utils.h"
 #include <malloc.h>
 #include <string.h>
 
@@ -12,4 +13,31 @@ character_t initCharacter(char* name, unsigned int raceID) {
     character->money = 0;
     character->stats = statPresets[raceID];
     return *character;
+}
+
+charAttack_t attackEnemy(enemy_t *enemy, character_t *character, unsigned int definedD6) {
+    charAttack_t attack;
+    if (definedD6 > 0) {
+        attack.d6[0] = definedD6;
+    }
+    else {
+        attack.d6[0] = d6();
+    }
+    attack.d6[1] = d6();
+    attack.damage = character->stats.strength;
+    if (character->stats.intelligence >= d20()) {
+        attack.crit = true;
+        attack.damage += attack.damage/2;
+    }
+    unsigned int skillCheck = attack.d6[0] + attack.d6[1];
+    attack.damage += skillCheck/2;
+    return attack;
+}
+
+bool receiveDamageChar(unsigned int damage, character_t *character) {
+    if (damage >= character->hp) {
+        return true;
+    }
+    character->hp -= damage;
+    return false;
 }
