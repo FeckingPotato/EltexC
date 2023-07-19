@@ -30,7 +30,7 @@ void pour(beaker_t* from, beaker_t* to) {
     to->current += amount;
 }
 
-unsigned int solve(beaker_t beakers[3], unsigned int R) {
+unsigned int solve1(beaker_t beakers[3], unsigned int R) {
     unsigned int counter = 1;
     while (beakers[0].current != R) {
         printf("%u. Poured from %u/%u beaker to %u/%u beaker\n", counter,
@@ -43,7 +43,7 @@ unsigned int solve(beaker_t beakers[3], unsigned int R) {
             pour(&beakers[1], &beakers[2]);
             counter++;
             if (beakers[1].current == 0) {
-                return counter-1;
+                break;
             }
             printf("%u. Poured from %u/%u beaker to %u/%u beaker\n", counter,
                    beakers[2].current, beakers[2].max, beakers[0].current, beakers[0].max);
@@ -53,6 +53,43 @@ unsigned int solve(beaker_t beakers[3], unsigned int R) {
                 return counter-1;
             }
         }
+    }
+    return counter-1;
+}
+
+unsigned int solve2(beaker_t beakers[3], unsigned int R) {
+    unsigned int counter = 1;
+    while (beakers[0].current != R) {
+        while (beakers[1].current != beakers[1].max) {
+            printf("%u. Poured from %u/%u beaker to %u/%u beaker\n", counter,
+                   beakers[0].current, beakers[0].max, beakers[2].current, beakers[2].max);
+            pour(&beakers[0], &beakers[2]);
+            counter++;
+            if (beakers[0].current == R) {
+                return counter-1;
+            }
+            printf("%u. Poured from %u/%u beaker to %u/%u beaker\n", counter,
+                   beakers[2].current, beakers[2].max, beakers[1].current, beakers[1].max);
+            pour(&beakers[2], &beakers[1]);
+            counter++;
+            if (beakers[0].current == R) {
+                return counter-1;
+            }
+        }
+        if (beakers[0].current == R) {
+            return counter-1;
+        }
+        printf("%u. Poured from %u/%u beaker to %u/%u beaker\n", counter,
+               beakers[1].current, beakers[1].max, beakers[0].current, beakers[0].max);
+        pour(&beakers[1], &beakers[0]);
+        counter++;
+        if (beakers[0].current == R) {
+            return counter-1;
+        }
+        printf("%u. Poured from %u/%u beaker to %u/%u beaker\n", counter,
+               beakers[2].current, beakers[2].max, beakers[1].current, beakers[1].max);
+        pour(&beakers[2], &beakers[1]);
+        counter++;
     }
     return counter-1;
 }

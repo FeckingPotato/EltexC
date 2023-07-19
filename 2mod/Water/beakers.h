@@ -7,4 +7,6 @@ int initBeakers(beaker_t beakers[3]);
 
 void pour(beaker_t* from, beaker_t* to);
 
-unsigned int solve(beaker_t beakers[3], unsigned int R);
+unsigned int solve1(beaker_t beakers[3], unsigned int R);
+
+unsigned int solve2(beaker_t beakers[3], unsigned int R);

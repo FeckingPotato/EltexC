@@ -36,7 +36,8 @@ int main() {
         printf("The required volume should be less or equal to the max volume of beakers");
         return 0;
     }
-    unsigned int steps = solve(beakers, R);
+    printf("Starting with the medium sized beaker:\n");
+    unsigned int steps1 = solve1(beakers, R);
     printf("Final liquid distribution in the beakers:\n"
            "1. %d/%d\n"
            "2. %d/%d\n"
@@ -44,6 +45,28 @@ int main() {
            beakers[0].current, beakers[0].max,
            beakers[1].current, beakers[1].max,
            beakers[2].current, beakers[2].max);
-    printf("Took %u steps\n", steps);
+    printf("Took %u steps\n", steps1);
+    initBeakers(beakers);
+    printf("\n");
+    printf("Starting with the small sized beaker:\n");
+    unsigned int steps2 = solve2(beakers, R);
+    printf("Final liquid distribution in the beakers:\n"
+           "1. %d/%d\n"
+           "2. %d/%d\n"
+           "3. %d/%d\n",
+           beakers[0].current, beakers[0].max,
+           beakers[1].current, beakers[1].max,
+           beakers[2].current, beakers[2].max);
+    printf("Took %u steps\n", steps2);
+    printf("\n");
+    if (steps1 < steps2) {
+        printf("The first method is more efficient\n");
+    }
+    else if (steps2 < steps1) {
+        printf("The second method is more efficient\n");
+    }
+    else {
+        printf("The methods are equally efficient\n");
+    }
     return 0;
 }
