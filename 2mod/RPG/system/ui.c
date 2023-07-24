@@ -1,7 +1,6 @@
 #include "ui.h"
 #include "utils.h"
 #include <stdio.h>
-#include <assert.h>
 
 void printSkills(character_t* character) {
     printf("%s's skills are:\n"
@@ -264,5 +263,15 @@ void stats(character_t *character) {
 }
 
 void endScreen(character_t* character, world_t* world) {
-    assert(false && "Not implemented");
+    if (world->dead) {
+        printf("You are dead. Better luck next time!\n"
+               "Exiting. ");
+    }
+    else {
+        printf("It took you %d days to defeat the boss.\n"
+               "You managed to achieve level %d\n"
+               "Exiting. ", world->day, character->xp / 20);
+        printSkills(character);
+    }
+    clearOutput(true);
 }
