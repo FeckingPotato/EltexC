@@ -1,8 +1,9 @@
 #pragma once
 
+#include "../adventures/enemy.h"
 #include "../items/equipment.h"
 #include "../items/healing.h"
-#include "../adventures/enemy.h"
+
 
 #define MAX_HP 50
 #define XP_PER_LEVEL 20
@@ -58,3 +59,7 @@ character_t initCharacter(char* name, unsigned int raceID);
 charAttack_t attackEnemy(enemy_t *enemy, character_t *character, unsigned int definedD6);
 
 bool receiveDamageChar(unsigned int damage, character_t *character);
+
+int attackChar(character_t *character, enemy_t* enemy);
+
+bool receiveDamageEnemy(unsigned int damage, enemy_t* enemy);

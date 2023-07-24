@@ -61,7 +61,7 @@ void init(character_t* character, world_t* world) {
            "My name is: ");
     fgets(name, 64, stdin);
     removeNL(name);
-    printf("Available racesArticles:\n"
+    printf("Available races:\n"
            "1. Human\n"
            "2. Orc\n"
            "3. Elf\n"
@@ -84,7 +84,7 @@ void init(character_t* character, world_t* world) {
     }
 }
 
-int mainMenu(character_t* character, world_t* world) {
+int mainMenu(world_t *world) {
     while (true) {
         printf("Day %u\n"
                "You are now in the town, your options are:\n"
@@ -111,8 +111,79 @@ int mainMenu(character_t* character, world_t* world) {
     }
 }
 
-void adventure(character_t* character, world_t* world) {
-    assert(false && "Not implemented");
+int fight(character_t *character) {
+    unsigned int die = 0;
+    bool rerolled = false;
+    enemy_t enemy = enemies[d6() % ENEMY_COUNT];
+    while (true) {
+        printf("You encounter a %s\n"
+               "His stats:\n"
+               "HP: %d/%d\n"
+               "Damage: %d\n"
+               "Resistance: %d\n"
+               "\n"
+               "1. Attack\n"
+               "2. Use potion\n"
+               "3. Escape\n"
+               "Your choice: ", enemy.name, enemy.hp, enemy.hpMax, enemy.damage, enemy.resistance);
+        int input = getDigit();
+        if (input == 1) {
+            charAttack_t charAttack;
+            while (true) {
+                charAttack = attackEnemy(&enemy, character, die);
+                die = 0;
+                printf("You roll %d and %d attack modifiers (%d in total) \n"
+                       "You deal %d damage\n",
+                       charAttack.d6[0], charAttack.d6[1], (charAttack.d6[0] + charAttack.d6[1])/2, charAttack.damage);
+                if (charAttack.crit) {
+                    printf("You deal critical damage\n");
+                }
+                printf("\n");
+                if (!rerolled) {
+                    printf("You can reroll one of your dice\n"
+                           "Input the number of the dice to reroll (1/2) or anything else to skip: ");
+                    int newDie = getDigit();
+                    if (newDie == 1 || newDie == 0) {
+                        die = newDie;
+                        rerolled = true;
+                        clearOutput(false);
+                        continue;
+                    }
+                }
+                break;
+            }
+            if (receiveDamageEnemy(charAttack.damage, &enemy)) {
+                printf("You have defeated the enemy, your reward is:\n"
+                       "XP: %d\n"
+                       "Money: %d\n", enemy.xp, enemy.money);
+                character->xp += enemy.xp;
+                character->money += enemy.money;
+                return 0;
+            }
+            int enemyAttack = attackChar(character, &enemy);
+            if (enemyAttack == -1) {
+                printf("You have dodged the attack\n");
+            }
+            else {
+                printf("You have received %d damage\n", enemyAttack);
+                if (receiveDamageChar(enemyAttack, character)) {
+                    printf("You have died\n");
+                    return -1;
+                }
+            }
+        }
+        else if (input == 2) {
+            // УЖАС
+        }
+        else if (input == 3) {
+            printf("You have deserted\n");
+            return 1;
+        }
+        else {
+            printf("Wrong option, try again\n");
+        }
+        clearOutput(true);
+    }
 }
 
 void shop(character_t* character, world_t* world) {
@@ -175,15 +246,13 @@ bool boss(character_t* character, world_t* world) {
     return true;
 }
 
-void sleep(character_t* character, world_t* world) {
-    printf("You fall asleep.\n"
+void charSleep(character_t* character, world_t* world) {
+    printf("You fall asleep\n"
            "HP restored\n");
     character->hp = MAX_HP;
-    advanceDay(world);
 }
 
 void stats(character_t *character) {
-    clearOutput(false);
     printf("%s's stats are:\n"
            "Race: %s\n"
            "Level: %u (%u XP left until the next level)\n"

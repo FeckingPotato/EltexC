@@ -7,7 +7,3 @@ world_t initWorld() {
     world->bossUnlocked = false;
     return *world;
 }
-
-void advanceDay(world_t* world) {
-    world->day++;
-}

@@ -11,23 +11,11 @@
 #endif
 
 unsigned int d6() {
-    srand(time(NULL));
     return rand() % 6 + 1;
 }
 
 unsigned int d20() {
-    srand(time(NULL));
     return rand() % 20 + 1;
-}
-
-int clamp(int value, int min, int max) {
-    if (value >= max) {
-        return max;
-    }
-    if (value <= min) {
-        return min;
-    }
-    return value;
 }
 
 void clearStdin() {
