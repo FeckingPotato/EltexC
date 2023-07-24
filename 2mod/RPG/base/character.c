@@ -15,7 +15,7 @@ character_t initCharacter(char* name, unsigned int raceID) {
     return *character;
 }
 
-charAttack_t attackEnemy(enemy_t *enemy, character_t *character, unsigned int definedD6) {
+charAttack_t attackEnemy(character_t *character, unsigned int definedD6) {
     charAttack_t attack;
     if (definedD6 > 0) {
         attack.d6[0] = definedD6;
@@ -29,8 +29,8 @@ charAttack_t attackEnemy(enemy_t *enemy, character_t *character, unsigned int de
         attack.crit = true;
         attack.damage += attack.damage/2;
     }
-    unsigned int skillCheck = attack.d6[0] + attack.d6[1];
-    attack.damage += skillCheck/2;
+    unsigned int skillCheck = attack.d6[0] + attack.d6[1] / 2;
+    attack.damage += skillCheck;
     return attack;
 }
 

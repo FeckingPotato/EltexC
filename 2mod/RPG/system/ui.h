@@ -11,15 +11,13 @@ int levelUp(unsigned int points, character_t* character);
 
 int mainMenu(world_t *world);
 
-void adventure(character_t* character, world_t* world);
+void shop(character_t *character);
 
-void shop(character_t* character, world_t* world);
-
-int fight(character_t *character);
+bool fight(character_t *character);
 
 bool boss(character_t* character, world_t* world);
 
-void charSleep(character_t* character, world_t* world);
+void charSleep(character_t *character);
 
 void stats(character_t *character);
 

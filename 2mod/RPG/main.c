@@ -17,8 +17,7 @@ int main() {
     else {
         init(&character, &world);
     }
-    bool finished = false;
-    while (!finished) {
+    while (!world.finished) {
         if (save("save.sv", &character, &world) != 0) {
             printf("ERROR: Save failed. Unable to open the save file.\n");
         }
@@ -28,20 +27,25 @@ int main() {
                 return 0;
             case 1:
                 clearOutput(false);
-                fight(&character);
-                world.day++;
+                world.finished = fight(&character);
+                if (world.finished) {
+                    world.dead = true;
+                }
+                else {
+                    world.day++;
+                }
                 break;
             case 2:
                 clearOutput(false);
-                shop(&character, &world);
+                shop(&character);
                 break;
             case 3:
                 clearOutput(false);
-                finished = boss(&character, &world);
+                world.finished = boss(&character, &world);
                 break;
             case 4:
                 clearOutput(false);
-                charSleep(&character, &world);
+                charSleep(&character);
                 world.day++;
                 break;
             case 5:

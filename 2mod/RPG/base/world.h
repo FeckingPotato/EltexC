@@ -2,8 +2,8 @@
 typedef struct {
     unsigned int day;
     bool bossUnlocked;
+    bool finished;
+    bool dead;
 } world_t;
 
 world_t initWorld();
-
-void advanceDay(world_t* world);

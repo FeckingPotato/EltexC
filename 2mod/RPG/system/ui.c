@@ -111,7 +111,7 @@ int mainMenu(world_t *world) {
     }
 }
 
-int fight(character_t *character) {
+bool fight(character_t *character) {
     unsigned int die = 0;
     bool rerolled = false;
     enemy_t enemy = enemies[d6() % ENEMY_COUNT];
@@ -120,17 +120,16 @@ int fight(character_t *character) {
                "His stats:\n"
                "HP: %d/%d\n"
                "Damage: %d\n"
-               "Resistance: %d\n"
                "\n"
                "1. Attack\n"
                "2. Use potion\n"
                "3. Escape\n"
-               "Your choice: ", enemy.name, enemy.hp, enemy.hpMax, enemy.damage, enemy.resistance);
+               "Your choice: ", enemy.name, enemy.hp, enemy.hpMax, enemy.damage);
         int input = getDigit();
         if (input == 1) {
             charAttack_t charAttack;
             while (true) {
-                charAttack = attackEnemy(&enemy, character, die);
+                charAttack = attackEnemy(character, die);
                 die = 0;
                 printf("You roll %d and %d attack modifiers (%d in total) \n"
                        "You deal %d damage\n",
@@ -158,7 +157,7 @@ int fight(character_t *character) {
                        "Money: %d\n", enemy.xp, enemy.money);
                 character->xp += enemy.xp;
                 character->money += enemy.money;
-                return 0;
+                return false;
             }
             int enemyAttack = attackChar(character, &enemy);
             if (enemyAttack == -1) {
@@ -168,16 +167,16 @@ int fight(character_t *character) {
                 printf("You have received %d damage\n", enemyAttack);
                 if (receiveDamageChar(enemyAttack, character)) {
                     printf("You have died\n");
-                    return -1;
+                    return true;
                 }
             }
         }
         else if (input == 2) {
-            // УЖАС
+            // JFC THERE IS SO MUCH MORE TO DO
         }
         else if (input == 3) {
             printf("You have deserted\n");
-            return 1;
+            return false;
         }
         else {
             printf("Wrong option, try again\n");
@@ -186,7 +185,7 @@ int fight(character_t *character) {
     }
 }
 
-void shop(character_t* character, world_t* world) {
+void shop(character_t *character) {
     while (true) {
         printf("You enter the shop. You can buy:\n");
         for (unsigned int i = 0; i < HEALING_COUNT; i++) {
@@ -246,7 +245,7 @@ bool boss(character_t* character, world_t* world) {
     return true;
 }
 
-void charSleep(character_t* character, world_t* world) {
+void charSleep(character_t *character) {
     printf("You fall asleep\n"
            "HP restored\n");
     character->hp = MAX_HP;

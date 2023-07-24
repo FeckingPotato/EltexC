@@ -1,7 +1,6 @@
 #pragma once
 
 #include "../adventures/enemy.h"
-#include "../items/equipment.h"
 #include "../items/healing.h"
 
 
@@ -20,15 +19,7 @@ typedef struct {
 } stats_t;
 
 typedef struct {
-    char* name;
-    int statID;
-    int buff;
-    bool used;
-} ultimate_t;
-
-typedef struct {
     healing_t healingItems[HEALING_CAPACITY];
-    equipment_t equipment[5]; // 0 - head, 1 - chest, 2 - legs, 3 - left hand, 4 - right hand
     unsigned int raceID;
     unsigned int hp;
     unsigned int xp;
@@ -56,7 +47,7 @@ static const stats_t statPresets[3] = {
 
 character_t initCharacter(char* name, unsigned int raceID);
 
-charAttack_t attackEnemy(enemy_t *enemy, character_t *character, unsigned int definedD6);
+charAttack_t attackEnemy(character_t *character, unsigned int definedD6);
 
 bool receiveDamageChar(unsigned int damage, character_t *character);
 
