@@ -2,7 +2,7 @@
 #define HEALING_COUNT 3
 
 typedef struct {
-    char* name;
+    char name[32];
     unsigned int price;
     unsigned int healingAmount;
 } healing_t;

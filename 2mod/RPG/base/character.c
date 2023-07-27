@@ -8,7 +8,7 @@ character_t initCharacter(char* name, unsigned int raceID) {
     character->name = (char*) malloc(strlen(name)+1);
     strcpy(character->name, name);
     character->raceID = raceID;
-    character->hp = MAX_HP;
+    character->hp = CHAR_MAX_HP;
     character->xp = 0;
     character->money = 0;
     character->stats = statPresets[raceID];
@@ -25,7 +25,9 @@ charAttack_t attackEnemy(character_t *character, unsigned int definedD6) {
     }
     attack.d6[1] = d6();
     attack.damage = character->stats.strength;
-    if (character->stats.intelligence >= d20()) {
+    unsigned int d20res = d20();
+    attack.crit = false;
+    if (character->stats.intelligence >= d20res) {
         attack.crit = true;
         attack.damage += attack.damage/2;
     }
@@ -47,7 +49,6 @@ int attackChar(character_t *character, enemy_t* enemy) {
     if (skillCheck < character->stats.dexterity) {
         return -1;
     }
-    skillCheck = d6() + d6();
     return skillCheck/2 + enemy->damage;
 }
 

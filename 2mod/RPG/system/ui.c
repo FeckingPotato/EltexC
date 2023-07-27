@@ -120,10 +120,12 @@ bool fight(character_t *character) {
                "HP: %d/%d\n"
                "Damage: %d\n"
                "\n"
+               "Your HP: %d/%d\n"
+               "\n"
                "1. Attack\n"
                "2. Use potion\n"
                "3. Escape\n"
-               "Your choice: ", enemy.name, enemy.hp, enemy.hpMax, enemy.damage);
+               "Your choice: ", enemy.name, enemy.hp, enemy.hpMax, enemy.damage, character->hp, CHAR_MAX_HP);
         int input = getDigit();
         if (input == 1) {
             charAttack_t charAttack;
@@ -141,12 +143,13 @@ bool fight(character_t *character) {
                     printf("You can reroll one of your dice\n"
                            "Input the number of the dice to reroll (1/2) or anything else to skip: ");
                     int newDie = getDigit();
-                    if (newDie == 1 || newDie == 0) {
+                    if (newDie == 1 || newDie == 2) {
                         die = newDie;
                         rerolled = true;
                         clearOutput(false);
                         continue;
                     }
+                    printf("\n");
                 }
                 break;
             }
@@ -154,6 +157,9 @@ bool fight(character_t *character) {
                 printf("You have defeated the enemy, your reward is:\n"
                        "XP: %d\n"
                        "Money: %d\n", enemy.xp, enemy.money);
+                if ((character->xp + enemy.xp) / 20 < character->xp) {
+                    levelUp(1, character);
+                }
                 character->xp += enemy.xp;
                 character->money += enemy.money;
                 return false;
@@ -171,7 +177,41 @@ bool fight(character_t *character) {
             }
         }
         else if (input == 2) {
-            // JFC THERE IS SO MUCH MORE TO DO
+            bool valid = false;
+            while (!valid) {
+                printf("Your potions:\n"
+                       "1. %s\n"
+                       "2. %s\n"
+                       "3. %s\n"
+                       "4. %s\n"
+                       "5. %s\n"
+                       "Pick your potion (1-5) or type anything else to exit: ",
+                       (character->healingItems[0].name[0] == '\0') ? "Empty" : character->healingItems[0].name,
+                       (character->healingItems[1].name[0] == '\0') ? "Empty" : character->healingItems[1].name,
+                       (character->healingItems[2].name[0] == '\0') ? "Empty" : character->healingItems[2].name,
+                       (character->healingItems[3].name[0] == '\0') ? "Empty" : character->healingItems[3].name,
+                       (character->healingItems[4].name[0] == '\0') ? "Empty" : character->healingItems[4].name
+                );
+                input = getDigit();
+                if (input < 1 || input > 5) {
+                    clearOutput(false);
+                    continue;
+                }
+                else {
+                    if (character->healingItems[input-1].name[0] == '\0') {
+                        printf("You don't have a potion in this slot\n");
+                        clearOutput(true);
+                    }
+                    else {
+                        character->hp += character->healingItems[input-1].healingAmount;
+                        if (character->hp > CHAR_MAX_HP) {
+                            character->hp = CHAR_MAX_HP;
+                        }
+                        character->healingItems[input-1].name[0] = '\0';
+                        valid = true;
+                    }
+                }
+            }
         }
         else if (input == 3) {
             printf("You have deserted\n");
@@ -191,15 +231,15 @@ void shop(character_t *character) {
             printf("%u. %s (heals %u HP, costs %u coins)\n",
                    i+1, potions[i].name, potions[i].healingAmount, potions[i].price);
         }
-        printf("Pick option (type in 0 to exit the shop)\n");
+        printf("Pick an option (type in 0 to exit the shop)\n");
         int option = getDigit(); // this will break if there are >9 healing items
         if (option < 0 || option > HEALING_COUNT) {
-            printf("Wrong option, try again\n");
+            printf("Wrong option, try again: ");
             clearOutput(true);
             continue;
         }
         if (option == 0) {
-            printf("You leave the shop");
+            printf("You leave the shop\n");
             break;
         }
         option--;
@@ -211,7 +251,7 @@ void shop(character_t *character) {
         unsigned int freeSlot = 0;
         bool notFree = true;
         while (freeSlot < HEALING_CAPACITY) {
-            if (character->healingItems[freeSlot].name == NULL) {
+            if (character->healingItems[freeSlot].name[0] == '\0') {
                 notFree = false;
                 break;
             }
@@ -247,7 +287,7 @@ bool boss(character_t* character, world_t* world) {
 void charSleep(character_t *character) {
     printf("You fall asleep\n"
            "HP restored\n");
-    character->hp = MAX_HP;
+    character->hp = CHAR_MAX_HP;
 }
 
 void stats(character_t *character) {

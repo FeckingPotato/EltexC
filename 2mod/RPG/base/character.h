@@ -4,7 +4,7 @@
 #include "../items/healing.h"
 
 
-#define MAX_HP 50
+#define CHAR_MAX_HP 50
 #define XP_PER_LEVEL 20
 #define HEALING_CAPACITY 5
 

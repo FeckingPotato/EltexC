@@ -32,7 +32,7 @@ int getDigit() {
 
 void clearOutput(bool anykey) {
     if (anykey) {
-        printf("Press any key to continue.");
+        printf("Type in anything to continue.");
         clearStdin();
         fgetc(stdin);
     }
