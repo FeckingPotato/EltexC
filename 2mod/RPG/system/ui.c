@@ -3,7 +3,7 @@
 #include <stdio.h>
 
 void printSkills(character_t* character) {
-    printf("%s's skills are:\n"
+    printf("\n%s's skills are:\n"
            "Strength: %u/%u\n"
            "Dexterity: %u/%u\n"
            "Intelligence: %u/%u\n",
@@ -110,12 +110,18 @@ int mainMenu(world_t *world) {
     }
 }
 
-bool fight(character_t *character) {
+bool fight(character_t *character, bool bossFight) {
     unsigned int die = 0;
     bool rerolled = false;
-    enemy_t enemy = enemies[d6() % ENEMY_COUNT];
+    enemy_t enemy;
+    if (bossFight) {
+        enemy = bossEnemy;
+    }
+    else {
+        enemy = enemies[d6() % ENEMY_COUNT];
+    }
     while (true) {
-        printf("You encounter a %s\n"
+        printf("You encounter %s\n"
                "His stats:\n"
                "HP: %d/%d\n"
                "Damage: %d\n"
@@ -127,6 +133,7 @@ bool fight(character_t *character) {
                "3. Escape\n"
                "Your choice: ", enemy.name, enemy.hp, enemy.hpMax, enemy.damage, character->hp, CHAR_MAX_HP);
         int input = getDigit();
+        printf("\n");
         if (input == 1) {
             charAttack_t charAttack;
             while (true) {
@@ -144,7 +151,7 @@ bool fight(character_t *character) {
                            "Input the number of the dice to reroll (1/2) or anything else to skip: ");
                     int newDie = getDigit();
                     if (newDie == 1 || newDie == 2) {
-                        die = newDie;
+                        die = charAttack.d6[!(newDie-1)];
                         rerolled = true;
                         clearOutput(false);
                         continue;
@@ -154,11 +161,13 @@ bool fight(character_t *character) {
                 break;
             }
             if (receiveDamageEnemy(charAttack.damage, &enemy)) {
+                if (bossFight) return false;
                 printf("You have defeated the enemy, your reward is:\n"
                        "XP: %d\n"
-                       "Money: %d\n", enemy.xp, enemy.money);
-                if ((character->xp + enemy.xp) / 20 < character->xp) {
-                    levelUp(1, character);
+                       "Money: %d\n"
+                       "\n", enemy.xp, enemy.money);
+                if ((character->xp + enemy.xp) / 20 < character->xp && !fullStats(character)) {
+                    while (levelUp(1, character) != 0);
                 }
                 character->xp += enemy.xp;
                 character->money += enemy.money;
@@ -195,7 +204,7 @@ bool fight(character_t *character) {
                 input = getDigit();
                 if (input < 1 || input > 5) {
                     clearOutput(false);
-                    continue;
+                    valid = true;
                 }
                 else {
                     if (character->healingItems[input-1].name[0] == '\0') {
@@ -214,8 +223,13 @@ bool fight(character_t *character) {
             }
         }
         else if (input == 3) {
-            printf("You have deserted\n");
-            return false;
+            if (bossFight) {
+                printf("You can't escape this battle\n");
+            }
+            else {
+                printf("You have deserted\n");
+                return false;
+            }
         }
         else {
             printf("Wrong option, try again\n");
@@ -280,7 +294,9 @@ bool boss(character_t* character, world_t* world) {
         world->bossUnlocked = true;
         return false;
     }
-    printf("The final boss fight is not done yet, so you defeat him easily.\n");
+    if (fight(character, true)) {
+        world->day = true;
+    }
     return true;
 }
 
@@ -310,8 +326,9 @@ void endScreen(character_t* character, world_t* world) {
     else {
         printf("It took you %d days to defeat the boss.\n"
                "You managed to achieve level %d\n"
-               "Exiting. ", world->day, character->xp / 20);
+               "\n", world->day, character->xp / 20);
         printSkills(character);
+        printf("\n");
     }
     clearOutput(true);
 }

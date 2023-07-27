@@ -13,7 +13,7 @@ int mainMenu(world_t *world);
 
 void shop(character_t *character);
 
-bool fight(character_t *character);
+bool fight(character_t *character, bool bossFight);
 
 bool boss(character_t* character, world_t* world);
 

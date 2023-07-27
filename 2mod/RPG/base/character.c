@@ -5,7 +5,6 @@
 
 character_t initCharacter(char* name, unsigned int raceID) {
     character_t * character = (character_t*) malloc(sizeof(character_t));
-    character->name = (char*) malloc(strlen(name)+1);
     strcpy(character->name, name);
     character->raceID = raceID;
     character->hp = CHAR_MAX_HP;
@@ -31,7 +30,7 @@ charAttack_t attackEnemy(character_t *character, unsigned int definedD6) {
         attack.crit = true;
         attack.damage += attack.damage/2;
     }
-    unsigned int skillCheck = attack.d6[0] + attack.d6[1] / 2;
+    unsigned int skillCheck = (attack.d6[0] + attack.d6[1]) / 2;
     attack.damage += skillCheck;
     return attack;
 }
@@ -58,4 +57,10 @@ bool receiveDamageEnemy(unsigned int damage, enemy_t* enemy) {
     }
     enemy->hp -= damage;
     return false;
+}
+
+bool fullStats(character_t *character) {
+    return (character->stats.intelligence == character->stats.intelligenceCap)
+    && (character->stats.strength == character->stats.strengthCap)
+    && (character->stats.dexterity == character->stats.dexterityCap);
 }

@@ -27,7 +27,7 @@ int main() {
                 return 0;
             case 1:
                 clearOutput(false);
-                world.finished = fight(&character);
+                world.finished = fight(&character, false);
                 if (world.finished) {
                     world.dead = true;
                 }

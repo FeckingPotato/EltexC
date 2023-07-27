@@ -19,13 +19,13 @@ typedef struct {
 } stats_t;
 
 typedef struct {
+    char name[128];
     healing_t healingItems[HEALING_CAPACITY];
     unsigned int raceID;
     unsigned int hp;
     unsigned int xp;
     unsigned int money;
     stats_t stats;
-    char* name;
 
 } character_t;
 
@@ -54,3 +54,5 @@ bool receiveDamageChar(unsigned int damage, character_t *character);
 int attackChar(character_t *character, enemy_t* enemy);
 
 bool receiveDamageEnemy(unsigned int damage, enemy_t* enemy);
+
+bool fullStats(character_t *character);
